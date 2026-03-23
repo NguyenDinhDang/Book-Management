@@ -1,19 +1,21 @@
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
+from app.api.endpoints import author, category, book
 
-app = FastAPI() #tạo app đây là trái tim server
+app = FastAPI(
+    title="Book management API",
+    description="Simple API to manage books, author, category add book cover",
+    version="1.0.0"
+)
 
-#database tạm thời chỉ là list trong ram
-tasks = []
-@app.get("/") # báo cho FastAPI biết: "khi ai gọi GET tới / thì chạy hàm bên dưới
-def hello():
-    return {"massage": "Hello World!"}
+#include router
 
-@app.get("/tasks") 
-def getTask():
-    return tasks
-#POST /task nhận task mới từ body sang list 
-@app.post("/task")  
-def create_task(task:dict):
-    tasks.append(task)
-    return {"message": "Thêm task thành công","task": task}
+app.include_router(author.router, prefix="/authors", tags=["Author"])
+app.include_router(category.router, prefix="/category", tags=["Category"])
+app.include_router(book.router, prefix="/books", tags=["Books"])
 
+#static file for cover image
+
+@app.get("/")
+def read_root():
+    return{"message":"Book management is running"}
