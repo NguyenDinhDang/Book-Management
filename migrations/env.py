@@ -9,6 +9,8 @@ from pathlib import Path
 from app.core.config import settings
 from app.db.base import Base #metadata all models
 
+BASE_DIR = Path(__file__).resolve().parents[1] #folder contain alembic
+sys.path.append(str(BASE_DIR))
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
